@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-
+import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 const img = (name: string, bg: string) =>
@@ -49,8 +49,16 @@ const products = raw.map(([title, description, price, category, stock]) => ({
 
 async function main() {
   for (const p of products) {
+
     await prisma.product.upsert({ where: { slug: p.slug }, update: p, create: p });
   }
+    const adminPassword = await bcrypt.hash("Admin@123", 10);
+  await prisma.user.upsert({
+    where: { email: "admin@shopverse.com" },
+    update: {},
+    create: { name: "Admin", email: "admin@shopverse.com", password: adminPassword, role: "ADMIN" },
+  });
+  console.log("Admin user ready");
   console.log("Seeded", products.length, "products");
 }
 
