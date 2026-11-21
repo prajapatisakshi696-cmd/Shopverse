@@ -2,51 +2,54 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const products = [
-  { title: "Wireless Headphones", 
-    slug: "wireless-headphones", 
-    description: "Noise cancelling over-ear headphones with 30 hour battery.", 
-    price: 299900, 
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
-    category: "Electronics", stock: 25 },
-  { title: "Smart Watch", 
-    slug: "smart-watch", 
-    description: "Fitness tracking, heart rate and sleep monitoring.", 
-    price: 499900, 
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80", 
-    category: "Electronics", stock: 15 },
-  { title: "Running Shoes", 
-    slug: "running-shoes", 
-    description: "Lightweight breathable shoes for daily running.", 
-    price: 249900, 
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&q=80", 
-    category: "Fashion", stock: 40 },
-  { title: "Backpack", 
-    slug: "backpack", 
-    description: "Water resistant 25L backpack with laptop sleeve.", 
-    price: 129900, 
-    image: "https://images.unsplash.com/photo-1553877520-8d09475a492f?w=600&q=80", 
-    category: "Fashion", stock: 30 },
-  { title: "Coffee Mug", 
-    slug: "coffee-mug", 
-    description: "Ceramic mug, 350ml, dishwasher safe.", 
-    price: 39900, 
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80", 
-    category: "Home", stock: 100 },
-  { title: "Desk Lamp", 
-    slug: "desk-lamp", 
-    description: "LED lamp with 3 brightness levels and USB charging.", 
-    price: 89900, 
-image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80",    category: "Home", stock: 50 },
-];
+const img = (name: string, bg: string) =>
+  `https://placehold.co/600x400/${bg}/ffffff?text=${encodeURIComponent(name)}`;
+
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+const raw = [
+  // Electronics
+  ["Wireless Headphones", "Noise cancelling over-ear headphones, 30 hour battery.", 299900, "Electronics", 25],
+  ["Smart Watch", "Fitness tracking, heart rate and sleep monitoring.", 499900, "Electronics", 15],
+  ["Bluetooth Speaker", "Portable waterproof speaker with deep bass.", 199900, "Electronics", 40],
+  ["Mechanical Keyboard", "Hot-swappable keys with RGB backlight.", 349900, "Electronics", 20],
+  ["Wireless Mouse", "Ergonomic mouse with silent clicks.", 79900, "Electronics", 60],
+  ["Power Bank 20000mAh", "Fast charging power bank with dual USB ports.", 189900, "Electronics", 35],
+  // Fashion
+  ["Running Shoes", "Lightweight breathable shoes for daily running.", 249900, "Fashion", 40],
+  ["Backpack", "Water resistant 25L backpack with laptop sleeve.", 129900, "Fashion", 30],
+  ["Denim Jacket", "Classic fit denim jacket, all season wear.", 219900, "Fashion", 18],
+  ["Cotton T-Shirt", "Soft 100% cotton regular fit t-shirt.", 59900, "Fashion", 100],
+  ["Sunglasses", "UV400 polarized sunglasses with metal frame.", 99900, "Fashion", 45],
+  ["Leather Wallet", "Slim genuine leather wallet with card slots.", 69900, "Fashion", 55],
+  // Home
+  ["Coffee Mug", "Ceramic mug, 350ml, dishwasher safe.", 39900, "Home", 100],
+  ["Desk Lamp", "LED lamp with 3 brightness levels and USB charging.", 89900, "Home", 50],
+  ["Cotton Bedsheet", "Double bed bedsheet with 2 pillow covers.", 119900, "Home", 28],
+  ["Wall Clock", "Silent sweep minimalist wall clock.", 49900, "Home", 33],
+  ["Water Bottle", "Insulated steel bottle, keeps cold for 24 hours.", 54900, "Home", 80],
+  ["Scented Candle Set", "Set of 3 soy wax candles.", 74900, "Home", 22],
+] as const;
+
+const colors: Record<string, string> = {
+  Electronics: "1e3a8a",
+  Fashion: "9d174d",
+  Home: "065f46",
+};
+
+const products = raw.map(([title, description, price, category, stock]) => ({
+  title,
+  slug: slugify(title),
+  description,
+  price,
+  category,
+  stock,
+  image: img(title, colors[category]),
+}));
 
 async function main() {
   for (const p of products) {
-    await prisma.product.upsert({
-      where: { slug: p.slug },
-      update: p,
-      create: p,
-    });
+    await prisma.product.upsert({ where: { slug: p.slug }, update: p, create: p });
   }
   console.log("Seeded", products.length, "products");
 }

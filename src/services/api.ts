@@ -14,11 +14,13 @@ export interface Product {
 interface ProductsResponse {
   products: Product[];
   total: number;
+  limit: number;
 }
 
 interface ProductsParams {
   search?: string;
   category?: string;
+  sort?: string;
   page?: number;
 }
 
