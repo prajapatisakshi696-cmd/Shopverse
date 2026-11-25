@@ -48,6 +48,7 @@ model Order {
   userId    String
   status    OrderStatus @default(PENDING)
   total     Int
+  shippingAddress Json
   items     OrderItem[]
   createdAt DateTime    @default(now())
 }
@@ -61,3 +62,4 @@ model OrderItem {
   quantity  Int
   price     Int
 }
+  

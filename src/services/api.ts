@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { OrderInput } from "@/lib/validators";
 
 export interface Product {
   id: string;
@@ -35,8 +36,13 @@ export const api = createApi({
     }),
     getProduct: builder.query<Product, string>({
       query: (slug) => `products/${slug}`,
+      providesTags: ["Product"],
+    }),
+    createOrder: builder.mutation<{ id: string }, OrderInput>({
+      query: (body) => ({ url: "orders", method: "POST", body }),
+      invalidatesTags: ["Product", "Order"], // stock changed, refetch products
     }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductQuery } = api;
+export const { useGetProductsQuery, useGetProductQuery, useCreateOrderMutation } = api;

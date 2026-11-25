@@ -4,6 +4,7 @@ import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
 import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
+import Footer from "@/components/Footer";
 
 
 const geistSans = Geist({
@@ -29,13 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <SessionProvider>
-  <StoreProvider>
-    <Header />
-    {children}
-  </StoreProvider>
-</SessionProvider>
-      </body>
+  <SessionProvider>
+    <StoreProvider>
+      <Header />
+      <div className="min-h-[70vh]">{children}</div>
+      <Footer />
+    </StoreProvider>
+  </SessionProvider>
+</body>
     </html>
   );
 }
