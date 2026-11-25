@@ -35,3 +35,20 @@ export const orderSchema = z.object({
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 export type OrderInput = z.infer<typeof orderSchema>;
+
+export const CATEGORIES = ["Electronics", "Fashion", "Home"] as const;
+
+export const productSchema = z.object({
+  title: z.string().min(2, "Title must be at least 2 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  price: z.number().positive("Price must be greater than 0"), // in rupees
+  image: z.string().url("Enter a valid image URL"),
+  category: z.enum(CATEGORIES),
+  stock: z.number().int("Stock must be a whole number").min(0, "Stock cannot be negative"),
+});
+
+export const orderStatusSchema = z.object({
+  status: z.enum(["PENDING", "PAID", "SHIPPED", "DELIVERED"]),
+});
+
+export type ProductInput = z.infer<typeof productSchema>;
