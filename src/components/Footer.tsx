@@ -6,12 +6,14 @@ export default function Footer() {
     <footer className="mt-16 border-t border-slate-200 bg-white">
       <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-600 text-white">
-              <ShoppingBag size={18} />
-            </span>
-            Shop<span className="text-indigo-600">Verse</span>
-          </Link>
+         <Link href="/" className="flex items-center gap-2 text-xl font-bold">
+  <span className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-600 text-white">
+    <ShoppingBag size={18} />
+  </span>
+  <span>
+    Shop<span className="text-indigo-600">Verse</span>
+  </span>
+</Link>
           <p className="mt-3 text-sm text-slate-500">
             Electronics, fashion and home essentials at prices you will love.
           </p>

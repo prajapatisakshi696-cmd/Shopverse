@@ -1,24 +1,30 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import { makeStore, AppStore } from "./store";
+import { makeStore } from "./store";
 import { hydrateCart } from "@/features/cart/cartSlice";
 
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
-  const storeRef = useRef<AppStore>(null);
-  if (!storeRef.current) storeRef.current = makeStore();
+  // lazy initializer runs only once, so each browser session gets one store
+  const [store] = useState(makeStore);
 
   useEffect(() => {
-    const store = storeRef.current!;
     try {
       const saved = localStorage.getItem("cart");
       if (saved) store.dispatch(hydrateCart(JSON.parse(saved)));
-    } catch {}
-    return store.subscribe(() => {
-      localStorage.setItem("cart", JSON.stringify(store.getState().cart.items));
-    });
-  }, []);
+    } catch {
+      // ignore corrupted localStorage data
+    }
 
-  return <Provider store={storeRef.current}>{children}</Provider>;
+    return store.subscribe(() => {
+      try {
+        localStorage.setItem("cart", JSON.stringify(store.getState().cart.items));
+      } catch {
+        // storage can be full or blocked
+      }
+    });
+  }, [store]);
+
+  return <Provider store={store}>{children}</Provider>;
 }

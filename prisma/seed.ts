@@ -1,11 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+
 const prisma = new PrismaClient();
 
 const img = (name: string, bg: string) =>
   `https://placehold.co/600x400/${bg}/ffffff?text=${encodeURIComponent(name)}`;
 
-const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const raw = [
   // Electronics
@@ -49,17 +51,29 @@ const products = raw.map(([title, description, price, category, stock]) => ({
 
 async function main() {
   for (const p of products) {
-
-    await prisma.product.upsert({ where: { slug: p.slug }, update: p, create: p });
+    await prisma.product.upsert({
+      where: { slug: p.slug },
+      update: p,
+      create: p,
+    });
   }
-    const adminPassword = await bcrypt.hash("Admin@123", 10);
+  console.log("Seeded", products.length, "products");
+
+  const adminPassword = await bcrypt.hash(
+    process.env.ADMIN_PASSWORD ?? "Admin@123",
+    10
+  );
   await prisma.user.upsert({
     where: { email: "admin@shopverse.com" },
-    update: {},
-    create: { name: "Admin", email: "admin@shopverse.com", password: adminPassword, role: "ADMIN" },
+    update: { name: "Store Admin" },
+    create: {
+      name: "Store Admin",
+      email: "admin@shopverse.com",
+      password: adminPassword,
+      role: "ADMIN",
+    },
   });
   console.log("Admin user ready");
-  console.log("Seeded", products.length, "products");
 }
 
 main()

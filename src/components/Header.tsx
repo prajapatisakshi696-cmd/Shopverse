@@ -15,11 +15,13 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-600 text-white">
-            <ShoppingBag size={18} />
-          </span>
-          Shop<span className="text-indigo-600">Verse</span>
-        </Link>
+  <span className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-600 text-white">
+    <ShoppingBag size={18} />
+  </span>
+  <span>
+    Shop<span className="text-indigo-600">Verse</span>
+  </span>
+</Link>
 
         <nav className="flex items-center gap-2 text-sm font-medium">
           {status === "authenticated" && (
