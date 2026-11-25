@@ -44,7 +44,7 @@ export default function ProductList() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 text-white">
+      {/* <section className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-600 text-white">
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
           <p className="mb-3 inline-block rounded-full bg-white/15 px-4 py-1 text-sm backdrop-blur">
             Free delivery on orders above ₹999
@@ -56,10 +56,11 @@ export default function ProductList() {
             Discover electronics, fashion and home essentials at prices you will love.
           </p>
         </div>
-      </section>
+      </section> */}
 
-      <main className="mx-auto max-w-6xl px-6 py-10">
-        {/* Filters */}
+<main id="products" className="mx-auto max-w-6xl scroll-mt-20 px-6 py-10">
+  <h2 className="mb-6 text-2xl font-bold">Our products</h2>
+          {/* Filters */}
         <div className="mb-8 space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row">
             <div className="relative flex-1">

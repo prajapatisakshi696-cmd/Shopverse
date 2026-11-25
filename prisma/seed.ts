@@ -46,7 +46,7 @@ const products = raw.map(([title, description, price, category, stock]) => ({
   price,
   category,
   stock,
-  image: img(title, colors[category]),
+  image: `/products/${slugify(title)}.svg`,
 }));
 
 async function main() {

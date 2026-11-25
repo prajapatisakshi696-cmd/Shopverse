@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/features/cart/cartSlice";
 import type { Product } from "@/services/api";
 import { formatPrice } from "@/lib/format";
+import { motion } from "framer-motion";
 
 export default function ProductCard({ product }: { product: Product }) {
   const dispatch = useAppDispatch();
@@ -20,7 +21,13 @@ export default function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <div className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-xl">
+    <motion.div
+       initial={{ opacity: 0, y: 24 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-40px" }}
+  transition={{ duration: 0.4 }}
+  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-xl"
+>
       <Link href={`/products/${product.slug}`} className="relative block overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -46,15 +53,16 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <div className="mt-4 flex items-center justify-between">
           <span className="text-lg font-bold">{formatPrice(product.price)}</span>
-          <button
+          <motion.button
+          whileTap={{ scale: 0.92 }}
             onClick={handleAdd}
             disabled={out}
             className="btn-primary !px-4 !py-2"
           >
             {added ? <><Check size={16} /> Added</> : <><ShoppingCart size={16} /> Add</>}
-          </button>
+          </motion.button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
